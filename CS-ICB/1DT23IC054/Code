@@ -1,0 +1,188 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+// Represents a single health metric reading
+class HealthData {
+    private String metricName;
+    private double value;
+    private String timestamp; // For simplicity, using String; in a real system, use java.time.LocalDateTime
+
+    public HealthData(String metricName, double value, String timestamp) {
+        this.metricName = metricName;
+        this.value = value;
+        this.timestamp = timestamp;
+    }
+
+    public String getMetricName() {
+        return metricName;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Metric: " + metricName + ", Value: " + value + ", Timestamp: " + timestamp;
+    }
+}
+
+// Represents a patient
+class Patient {
+    private String patientId;
+    private String name;
+    private List<HealthData> healthReadings;
+
+    public Patient(String patientId, String name) {
+        this.patientId = patientId;
+        this.name = name;
+        this.healthReadings = new ArrayList<>();
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void addHealthData(HealthData data) {
+        healthReadings.add(data);
+    }
+
+    public void displayHealthHistory() {
+        System.out.println("--- Health History for Patient " + name + " (ID: " + patientId + ") ---");
+        if (healthReadings.isEmpty()) {
+            System.out.println("No health data recorded yet.");
+        } else {
+            for (HealthData reading : healthReadings) {
+                System.out.println(reading);
+            }
+        }
+        System.out.println("--------------------------------------------------");
+    }
+}
+
+// Manages the health monitoring system
+public class HealthMonitoringSystem {
+    private List<Patient> patients;
+    private Scanner scanner;
+
+    public HealthMonitoringSystem() {
+        this.patients = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void addPatient() {
+        System.out.print("Enter Patient ID: ");
+        String patientId = scanner.nextLine();
+        System.out.print("Enter Patient Name: ");
+        String name = scanner.nextLine();
+        Patient patient = new Patient(patientId, name);
+        patients.add(patient);
+        System.out.println("Patient " + name + " added successfully.");
+    }
+
+    public Patient findPatient(String patientId) {
+        for (Patient patient : patients) {
+            if (patient.getPatientId().equals(patientId)) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    public void recordHealthData() {
+        System.out.print("Enter Patient ID to record data for: ");
+        String patientId = scanner.nextLine();
+        Patient patient = findPatient(patientId);
+
+        if (patient != null) {
+            System.out.print("Enter Metric Name (e.g., Temperature, HeartRate): ");
+            String metricName = scanner.nextLine();
+            System.out.print("Enter Value: ");
+            double value = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter Timestamp (e.g., 2023-10-27 10:00:00): ");
+            String timestamp = scanner.nextLine();
+
+            HealthData data = new HealthData(metricName, value, timestamp);
+            patient.addHealthData(data);
+            System.out.println("Health data recorded for Patient " + patient.getName() + ".");
+        } else {
+            System.out.println("Patient with ID " + patientId + " not found.");
+        }
+    }
+
+    public void viewHealthHistory() {
+        System.out.print("Enter Patient ID to view health history: ");
+        String patientId = scanner.nextLine();
+        Patient patient = findPatient(patientId);
+
+        if (patient != null) {
+            patient.displayHealthHistory();
+        } else {
+            System.out.println("Patient with ID " + patientId + " not found.");
+        }
+    }
+
+    public void displayAllPatients() {
+        System.out.println("--- List of All Patients ---");
+        if (patients.isEmpty()) {
+            System.out.println("No patients registered yet.");
+        } else {
+            for (Patient patient : patients) {
+                System.out.println("ID: " + patient.getPatientId() + ", Name: " + patient.getName());
+            }
+        }
+        System.out.println("----------------------------");
+    }
+
+    public void run() {
+        int choice;
+        do {
+            System.out.println("\n--- Health Monitoring System ---");
+            System.out.println("1. Add New Patient");
+            System.out.println("2. Record Health Data");
+            System.out.println("3. View Health History");
+            System.out.println("4. List All Patients");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addPatient();
+                    break;
+                case 2:
+                    recordHealthData();
+                    break;
+                case 3:
+                    viewHealthHistory();
+                    break;
+                case 4:
+                    displayAllPatients();
+                    break;
+                case 0:
+                    System.out.println("Exiting the system. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 0);
+
+        scanner.close();
+    }
+
+    public static void main(String[] args) {
+        HealthMonitoringSystem system = new HealthMonitoringSystem();
+        system.run();
+    }
+}
