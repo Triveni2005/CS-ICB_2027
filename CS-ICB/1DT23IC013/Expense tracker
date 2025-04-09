@@ -1,0 +1,133 @@
+import java.util.*;
+
+public class ExpenseTracker {
+
+    static class Expense {
+        String category;
+        double amount;
+        String description;
+        Date date;
+
+        public Expense(String category, double amount, String description, Date date) {
+            this.category = category;
+            this.amount = amount;
+            this.description = description;
+            this.date = date;
+        }
+
+        @Override
+        public String toString() {
+            return "Category: " + category + ", Amount: $" + amount + ", Description: " + description + ", Date: " + date;
+        }
+    }
+
+    private static final List<Expense> expenses = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\nExpense Tracker Menu:");
+            System.out.println("1. Add Expense");
+            System.out.println("2. View All Expenses");
+            System.out.println("3. Search Expenses by Category");
+            System.out.println("4. Generate Monthly Report");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addExpense(scanner);
+                    break;
+                case 2:
+                    viewAllExpenses();
+                    break;
+                case 3:
+                    searchExpensesByCategory(scanner);
+                    break;
+                case 4:
+                    generateMonthlyReport(scanner);
+                    break;
+                case 5:
+                    running = false;
+                    System.out.println("Exiting Expense Tracker. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+        scanner.close();
+    }
+
+    private static void addExpense(Scanner scanner) {
+        System.out.print("Enter category: ");
+        String category = scanner.nextLine();
+
+        System.out.print("Enter amount: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
+
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+
+        Date date = new Date(); // Current date
+
+        Expense expense = new Expense(category, amount, description, date);
+        expenses.add(expense);
+
+        System.out.println("Expense added successfully!");
+    }
+
+    private static void viewAllExpenses() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses recorded.");
+            return;
+        }
+
+        System.out.println("\nAll Expenses:");
+        for (Expense expense : expenses) {
+            System.out.println(expense);
+        }
+    }
+
+    private static void searchExpensesByCategory(Scanner scanner) {
+        System.out.print("Enter category to search: ");
+        String category = scanner.nextLine();
+
+        boolean found = false;
+        System.out.println("\nExpenses in category: " + category);
+        for (Expense expense : expenses) {
+            if (expense.category.equalsIgnoreCase(category)) {
+                System.out.println(expense);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No expenses found in this category.");
+        }
+    }
+
+    private static void generateMonthlyReport(Scanner scanner) {
+        System.out.print("Enter month (1-12): ");
+        int month = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        double total = 0;
+        System.out.println("\nMonthly Report:");
+        for (Expense expense : expenses) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(expense.date);
+            if (cal.get(Calendar.MONTH) + 1 == month) {
+                System.out.println(expense);
+                total += expense.amount;
+            }
+        }
+
+        System.out.println("Total expenses for month " + month + ": $" + total);
+    }
+}
