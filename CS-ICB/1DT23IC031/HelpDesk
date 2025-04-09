@@ -1,0 +1,114 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Ticket {
+    private static int idCounter = 1;
+    private int ticketId;
+    private String issue;
+    private String status;
+
+    public Ticket(String issue) {
+        this.ticketId = idCounter++;
+        this.issue = issue;
+        this.status = "Open";
+    }
+
+    public int getTicketId() {
+        return ticketId;
+    }
+
+    public String getIssue() {
+        return issue;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void closeTicket() {
+        this.status = "Closed";
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket ID: " + ticketId + ", Issue: " + issue + ", Status: " + status;
+    }
+}
+
+class HelpDeskSystem {
+    private ArrayList<Ticket> tickets = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
+
+    public void run() {
+        while (true) {
+            System.out.println("\n=== Help Desk Management System ===");
+            System.out.println("1. Create Ticket");
+            System.out.println("2. View All Tickets");
+            System.out.println("3. Close Ticket");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // consume the newline character
+
+            switch (choice) {
+                case 1:
+                    createTicket();
+                    break;
+                case 2:
+                    viewTickets();
+                    break;
+                case 3:
+                    closeTicket();
+                    break;
+                case 4:
+                    System.out.println("Exiting Help Desk System. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private void createTicket() {
+        System.out.print("Enter the issue description: ");
+        String issue = scanner.nextLine();
+        Ticket ticket = new Ticket(issue);
+        tickets.add(ticket);
+        System.out.println("Ticket created successfully with ID: " + ticket.getTicketId());
+    }
+
+    private void viewTickets() {
+        if (tickets.isEmpty()) {
+            System.out.println("No tickets available.");
+            return;
+        }
+        for (Ticket ticket : tickets) {
+            System.out.println(ticket);
+        }
+    }
+
+    private void closeTicket() {
+        System.out.print("Enter the Ticket ID to close: ");
+        int ticketId = scanner.nextInt();
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketId() == ticketId) {
+                if (ticket.getStatus().equals("Closed")) {
+                    System.out.println("This ticket is already closed.");
+                    return;
+                }
+                ticket.closeTicket();
+                System.out.println("Ticket ID " + ticketId + " closed successfully.");
+                return;
+            }
+        }
+        System.out.println("Ticket ID not found.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        HelpDeskSystem helpDesk = new HelpDeskSystem();
+        helpDesk.run();
+    }
+}
