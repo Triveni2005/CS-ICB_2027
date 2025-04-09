@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+public class WordGuessGame {
+    public static void main(String[] args) {
+        // Word to be guessed
+        String wordToGuess = "JAVA";
+        
+        // Create a string array to represent the guessed word, initialize with underscores
+        char[] guessedWord = new char[wordToGuess.length()];
+        for (int i = 0; i < wordToGuess.length(); i++) {
+            guessedWord[i] = '_';
+        }
+        
+        // Initialize the Scanner
+        Scanner scanner = new Scanner(System.in);
+        int attempts = 10; // Set a limit on the number of attempts
+
+        System.out.println("Welcome to the Word Guessing Game!");
+        System.out.println("Try to guess the word!");
+        
+        // Main game loop
+        while (attempts > 0) {
+            System.out.println("\nGuessed Word: " + new String(guessedWord));
+            System.out.println("Attempts remaining: " + attempts);
+            System.out.print("Enter a letter: ");
+            
+            char guessedLetter = scanner.next().charAt(0); // Get the letter from the user
+            
+            // Check if the guessed letter is in the word
+            boolean letterFound = false;
+            for (int i = 0; i < wordToGuess.length(); i++) {
+                if (wordToGuess.charAt(i) == guessedLetter) {
+                    guessedWord[i] = guessedLetter; // Update the guessed word with the correct letter
+                    letterFound = true;
+                }
+            }
+
+            if (letterFound) {
+                System.out.println("Good job! The letter is in the word.");
+            } else {
+                attempts--; // Decrease attempts if the letter is not found
+                System.out.println("Oops! The letter is not in the word.");
+            }
+
+            // Check if the user has guessed the whole word
+            if (new String(guessedWord).equals(wordToGuess)) {
+                System.out.println("\nCongratulations! You've guessed the word: " + wordToGuess);
+                break;
+            }
+
+            // If the player runs out of attempts, end the game
+            if (attempts == 0) {
+                System.out.println("\nSorry, you've run out of attempts. The word was: " + wordToGuess);
+            }
+        }
+
+        // Close the scanner
+        scanner.close();
+    }
+}
