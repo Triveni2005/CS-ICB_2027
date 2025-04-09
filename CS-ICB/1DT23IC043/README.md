@@ -1,10 +1,1 @@
-# Student Submission Folder
-
-Please place your project files for CS-ICB here.
-
-✅ Guidelines:
-- Include a `README.md` explaining your project (if applicable).
-- Upload only your own work.
-- Do not rename this folder.
-
-🎓 Good luck and happy coding!
+The FlashcardApp is a simple Java program that allows users to create flashcards, test their knowledge with those flashcards, and view their results. It provides a menu with options to add flashcards, take a quiz, and check the number of correct and incorrect answers. The user can enter a question and its corresponding answer, and then later test their memory by answering the questions. The program tracks and displays the number of correct and incorrect responses after the quiz.
