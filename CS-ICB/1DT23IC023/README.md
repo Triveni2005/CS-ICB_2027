@@ -14,3 +14,4 @@ This is a simple Java console application that calculates the total marks, perce
 
 1. Open the project in your Java IDE or terminal
 2. Compile the file:
+3. Run the program:
