@@ -1,0 +1,147 @@
+
+public class Student {
+    private int studentId;
+    private String name;
+    private int age;
+
+    // Constructor
+    public Student(int studentId, String name, int age) {
+        this.studentId = studentId;
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getters and Setters
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void displayStudentDetails() {
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+```
+
+```java
+// Teacher.java
+public class Teacher {
+    private int teacherId;
+    private String name;
+    private String subject;
+
+    // Constructor
+    public Teacher(int teacherId, String name, String subject) {
+        this.teacherId = teacherId;
+        this.name = name;
+        this.subject = subject;
+    }
+
+    // Getters and Setters
+    public int getTeacherId() {
+        return teacherId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void displayTeacherDetails() {
+        System.out.println("Teacher ID: " + teacherId);
+        System.out.println("Name: " + name);
+        System.out.println("Subject: " + subject);
+    }
+}
+```
+
+```java
+// SchoolManagement.java
+import java.util.ArrayList;
+
+public class SchoolManagement {
+    private ArrayList<Student> students = new ArrayList<>();
+    private ArrayList<Teacher> teachers = new ArrayList<>();
+
+    public void addStudent(Student student) {
+        students.add(student);
+        System.out.println("Student added: " + student.getName());
+    }
+
+    public void addTeacher(Teacher teacher) {
+        teachers.add(teacher);
+        System.out.println("Teacher added: " + teacher.getName());
+    }
+
+    public void displayStudents() {
+        System.out.println("List of Students:");
+        for (Student student : students) {
+            student.displayStudentDetails();
+        }
+    }
+
+    public void displayTeachers() {
+        System.out.println("List of Teachers:");
+        for (Teacher teacher : teachers) {
+            teacher.displayTeacherDetails();
+        }
+    }
+
+    public static void main(String[] args) {
+        SchoolManagement school = new SchoolManagement();
+
+        // Adding Students
+        Student student1 = new Student(1, "Alice", 14);
+        Student student2 = new Student(2, "Bob", 15);
+
+        school.addStudent(student1);
+        school.addStudent(student2);
+
+        // Adding Teachers
+        Teacher teacher1 = new Teacher(101, "Mr. Smith", "Math");
+        Teacher teacher2 = new Teacher(102, "Mrs. Johnson", "Science");
+
+        school.addTeacher(teacher1);
+        school.addTeacher(teacher2);
+
+        // Displaying Students and Teachers
+        school.displayStudents();
+        school.displayTeachers();
+    }
+}
+```
+
+This system includes:
+- A `Student` class for student details.
+- A `Teacher` class for teacher details.
+- A `SchoolManagement` class to manage the list of students and teachers.
+
+You can expand this system by adding features like course management, grading, and attendance tracking. Let me know if you'd like help with any specific enhancements!
