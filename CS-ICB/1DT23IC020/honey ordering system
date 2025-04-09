@@ -1,0 +1,116 @@
+import java.util.*;
+
+class Constants {
+    public static final int[] STANDARD_SIZES = {50, 100, 250, 500, 750, 1000};
+    public static final double MIN_ORDER_AMOUNT = 399.0;
+    public static final double FREE_OFFER_THRESHOLD = 599.0;
+    public static final int FREE_HONEY_SIZE = 50;
+}
+
+class HoneyVariety {
+    String name;
+    double pricePerMl;
+
+    public HoneyVariety(String name, double pricePerMl) {
+        this.name = name;
+        this.pricePerMl = pricePerMl;
+    }
+}
+
+public class ArthaOrganicsHoneyOrdering {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        StringBuilder orderDetails = new StringBuilder();
+        orderDetails.append("===== Artha Organics - Honey Order Summary =====\n\n");
+
+        Map<Integer, HoneyVariety> honeyMenu = getHoneyMenu();
+        Map<String, Double> orderSummary = new LinkedHashMap<>();
+        double total = 0;
+
+        System.out.println("===== Welcome to Artha Organics - Honey Ordering System =====");
+        boolean ordering = true;
+
+        while (ordering) {
+            System.out.println("\nAvailable Honey Varieties:");
+            for (Map.Entry<Integer, HoneyVariety> entry : honeyMenu.entrySet()) {
+                System.out.printf("%d. %s (Rs. %.2f/ml)\n", entry.getKey(), entry.getValue().name, entry.getValue().pricePerMl);
+            }
+
+            System.out.print("Enter the number of your desired variety: ");
+            int varietyChoice = scanner.nextInt();
+            if (!honeyMenu.containsKey(varietyChoice)) {
+                System.out.println("Invalid choice. Please try again.");
+                continue;
+            }
+
+            HoneyVariety selectedHoney = honeyMenu.get(varietyChoice);
+
+            System.out.println("Available package sizes (in ml): " + Arrays.toString(Constants.STANDARD_SIZES));
+            System.out.print("Enter the package size (ml): ");
+            int size = scanner.nextInt();
+            if (!isValidSize(size)) {
+                System.out.println("Invalid size. Please select from the standard sizes.");
+                continue;
+            }
+
+            System.out.print("Enter the quantity: ");
+            int quantity = scanner.nextInt();
+
+            double cost = selectedHoney.pricePerMl * size * quantity;
+            String orderKey = quantity + " x " + size + "ml " + selectedHoney.name;
+            orderSummary.put(orderKey, cost);
+            total += cost;
+
+            System.out.print("Do you want to order more? (yes/no): ");
+            ordering = scanner.next().equalsIgnoreCase("yes");
+        }
+
+        orderDetails.append("Items:\n");
+        for (Map.Entry<String, Double> entry : orderSummary.entrySet()) {
+            orderDetails.append(String.format("%s - Rs. %.2f\n", entry.getKey(), entry.getValue()));
+        }
+
+        // Freebie logic
+        if (total >= Constants.FREE_OFFER_THRESHOLD) {
+            HoneyVariety freeHoney = honeyMenu.get(1); // Assuming 1 is standard honey
+            double freeCost = freeHoney.pricePerMl * Constants.FREE_HONEY_SIZE;
+            orderDetails.append(String.format("\nBonus: 1 x 50ml %s (worth Rs. %.2f) added for FREE!\n",
+                    freeHoney.name, freeCost));
+        }
+
+        orderDetails.append(String.format("\nTotal Order Amount: Rs. %.2f\n", total));
+
+        if (total < Constants.MIN_ORDER_AMOUNT) {
+            orderDetails.append(String.format("Note: Minimum order value is Rs. %.2f. Please add more items.\n", Constants.MIN_ORDER_AMOUNT));
+            System.out.printf("Order total Rs. %.2f is below minimum. Order not placed.\n", total);
+        } else {
+            orderDetails.append("Order Placed Successfully!\n");
+            orderDetails.append("Thank you for Shopping with Artha Organics!\n");
+        }
+
+        // Display the full summary
+        System.out.println("\n========= ORDER SUMMARY =========\n");
+        System.out.println(orderDetails.toString());
+
+        scanner.close();
+    }
+
+    // Hardcoded honey menu
+    public static Map<Integer, HoneyVariety> getHoneyMenu() {
+        Map<Integer, HoneyVariety> menu = new LinkedHashMap<>();
+        menu.put(1, new HoneyVariety("Standard Honey", 0.80));
+        menu.put(2, new HoneyVariety("Tulsi Honey", 1.00));
+        menu.put(3, new HoneyVariety("Neem Honey", 1.20));
+        menu.put(4, new HoneyVariety("Eucalyptus Honey", 1.10));
+        menu.put(5, new HoneyVariety("Jamun Honey", 1.30));
+        return menu;
+    }
+
+    // Size checker
+    public static boolean isValidSize(int size) {
+        for (int s : Constants.STANDARD_SIZES) {
+            if (s == size) return true;
+        }
+        return false;
+    }
+}
