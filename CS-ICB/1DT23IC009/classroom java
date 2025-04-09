@@ -1,8 +1,8 @@
-import java.util.*;
+import java.util.Scanner;
 
 class Student {
-    private String id;
-    private String name;
+    String id;
+    String name;
 
     public Student(String id, String name) {
         this.id = id;
@@ -19,36 +19,37 @@ class Student {
 }
 
 class Course {
-    private String courseCode;
-    private String courseName;
-    private List<Student> enrolledStudents;
+    String courseCode;
+    String courseName;
+    Student[] enrolledStudents = new Student[10]; // Limited to 10 students for simplicity
+    int studentCount = 0;
 
     public Course(String courseCode, String courseName) {
         this.courseCode = courseCode;
         this.courseName = courseName;
-        this.enrolledStudents = new ArrayList<>();
     }
 
     public void enrollStudent(Student student) {
-        enrolledStudents.add(student);
+        if (studentCount < enrolledStudents.length) {
+            enrolledStudents[studentCount++] = student;
+        } else {
+            System.out.println("Course is full!");
+        }
     }
 
     public void displayStudents() {
         System.out.println("Students enrolled in " + courseName + ":");
-        for (Student s : enrolledStudents) {
-            System.out.println(s);
+        for (int i = 0; i < studentCount; i++) {
+            System.out.println(enrolledStudents[i]);
         }
-    }
-
-    @Override
-    public String toString() {
-        return courseCode + ": " + courseName;
     }
 }
 
 public class ClassroomManagementSystem {
-    private static Map<String, Student> students = new HashMap<>();
-    private static Map<String, Course> courses = new HashMap<>();
+    static Student[] students = new Student[10];
+    static Course[] courses = new Course[10];
+    static int studentCount = 0;
+    static int courseCount = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -95,7 +96,7 @@ public class ClassroomManagementSystem {
         String id = scanner.nextLine();
         System.out.print("Enter Student Name: ");
         String name = scanner.nextLine();
-        students.put(id, new Student(id, name));
+        students[studentCount++] = new Student(id, name);
         System.out.println("Student added successfully.");
     }
 
@@ -104,14 +105,14 @@ public class ClassroomManagementSystem {
         String code = scanner.nextLine();
         System.out.print("Enter Course Name: ");
         String name = scanner.nextLine();
-        courses.put(code, new Course(code, name));
+        courses[courseCount++] = new Course(code, name);
         System.out.println("Course added successfully.");
     }
 
     private static void enrollStudent(Scanner scanner) {
         System.out.print("Enter Student ID: ");
         String studentId = scanner.nextLine();
-        Student student = students.get(studentId);
+        Student student = findStudent(studentId);
         if (student == null) {
             System.out.println("Student not found.");
             return;
@@ -119,7 +120,7 @@ public class ClassroomManagementSystem {
 
         System.out.print("Enter Course Code: ");
         String courseCode = scanner.nextLine();
-        Course course = courses.get(courseCode);
+        Course course = findCourse(courseCode);
         if (course == null) {
             System.out.println("Course not found.");
             return;
@@ -132,7 +133,7 @@ public class ClassroomManagementSystem {
     private static void displayEnrollments(Scanner scanner) {
         System.out.print("Enter Course Code: ");
         String courseCode = scanner.nextLine();
-        Course course = courses.get(courseCode);
+        Course course = findCourse(courseCode);
         if (course == null) {
             System.out.println("Course not found.");
             return;
@@ -140,4 +141,22 @@ public class ClassroomManagementSystem {
 
         course.displayStudents();
     }
+
+    private static Student findStudent(String id) {
+        for (int i = 0; i < studentCount; i++) {
+            if (students[i].getId().equals(id)) {
+                return students[i];
+            }
+        }
+        return null;
+    }
+
+    private static Course findCourse(String code) {
+        for (int i = 0; i < courseCount; i++) {
+            if (courses[i].courseCode.equals(code)) {
+                return courses[i];
+            }
+        }
+        return null;
+    }
 }
