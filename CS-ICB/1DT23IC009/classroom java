@@ -1,0 +1,143 @@
+import java.util.*;
+
+class Student {
+    private String id;
+    private String name;
+
+    public Student(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() { return id; }
+    public String getName() { return name; }
+
+    @Override
+    public String toString() {
+        return id + ": " + name;
+    }
+}
+
+class Course {
+    private String courseCode;
+    private String courseName;
+    private List<Student> enrolledStudents;
+
+    public Course(String courseCode, String courseName) {
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.enrolledStudents = new ArrayList<>();
+    }
+
+    public void enrollStudent(Student student) {
+        enrolledStudents.add(student);
+    }
+
+    public void displayStudents() {
+        System.out.println("Students enrolled in " + courseName + ":");
+        for (Student s : enrolledStudents) {
+            System.out.println(s);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return courseCode + ": " + courseName;
+    }
+}
+
+public class ClassroomManagementSystem {
+    private static Map<String, Student> students = new HashMap<>();
+    private static Map<String, Course> courses = new HashMap<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n--- Classroom Management System ---");
+            System.out.println("1. Add Student");
+            System.out.println("2. Add Course");
+            System.out.println("3. Enroll Student in Course");
+            System.out.println("4. Display Course Enrollments");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume leftover newline
+
+            switch (choice) {
+                case 1:
+                    addStudent(scanner);
+                    break;
+                case 2:
+                    addCourse(scanner);
+                    break;
+                case 3:
+                    enrollStudent(scanner);
+                    break;
+                case 4:
+                    displayEnrollments(scanner);
+                    break;
+                case 5:
+                    System.out.println("Exiting system...");
+                    break;
+                default:
+                    System.out.println("Invalid choice, try again.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+
+    private static void addStudent(Scanner scanner) {
+        System.out.print("Enter Student ID: ");
+        String id = scanner.nextLine();
+        System.out.print("Enter Student Name: ");
+        String name = scanner.nextLine();
+        students.put(id, new Student(id, name));
+        System.out.println("Student added successfully.");
+    }
+
+    private static void addCourse(Scanner scanner) {
+        System.out.print("Enter Course Code: ");
+        String code = scanner.nextLine();
+        System.out.print("Enter Course Name: ");
+        String name = scanner.nextLine();
+        courses.put(code, new Course(code, name));
+        System.out.println("Course added successfully.");
+    }
+
+    private static void enrollStudent(Scanner scanner) {
+        System.out.print("Enter Student ID: ");
+        String studentId = scanner.nextLine();
+        Student student = students.get(studentId);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        System.out.print("Enter Course Code: ");
+        String courseCode = scanner.nextLine();
+        Course course = courses.get(courseCode);
+        if (course == null) {
+            System.out.println("Course not found.");
+            return;
+        }
+
+        course.enrollStudent(student);
+        System.out.println("Student enrolled successfully.");
+    }
+
+    private static void displayEnrollments(Scanner scanner) {
+        System.out.print("Enter Course Code: ");
+        String courseCode = scanner.nextLine();
+        Course course = courses.get(courseCode);
+        if (course == null) {
+            System.out.println("Course not found.");
+            return;
+        }
+
+        course.displayStudents();
+    }
+}
