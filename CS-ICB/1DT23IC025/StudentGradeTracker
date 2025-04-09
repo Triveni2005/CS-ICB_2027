@@ -1,0 +1,48 @@
+import java.util.Scanner;
+
+public class StudentGradeTracker {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input student details
+        System.out.print("Enter student name: ");
+        String name = sc.nextLine();
+
+        // Input marks for 3 subjects
+        System.out.print("Enter marks for Math: ");
+        int math = sc.nextInt();
+
+        System.out.print("Enter marks for Science: ");
+        int science = sc.nextInt();
+
+        System.out.print("Enter marks for English: ");
+        int english = sc.nextInt();
+
+        // Calculate total and average
+        int total = math + science + english;
+        double average = total / 3.0;
+
+        // Determine grade
+        char grade;
+        if (average >= 90)
+            grade = 'A';
+        else if (average >= 80)
+            grade = 'B';
+        else if (average >= 70)
+            grade = 'C';
+        else if (average >= 60)
+            grade = 'D';
+        else
+            grade = 'F';
+
+        // Display result
+        System.out.println("\n----- Student Report -----");
+        System.out.println("Name     : " + name);
+        System.out.println("Math     : " + math);
+        System.out.println("Science  : " + science);
+        System.out.println("English  : " + english);
+        System.out.println("Total    : " + total);
+        System.out.println("Average  : " + average);
+        System.out.println("Grade    : " + grade);
+    }
+}
